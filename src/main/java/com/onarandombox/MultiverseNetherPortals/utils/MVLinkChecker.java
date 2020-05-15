@@ -4,8 +4,8 @@ import com.onarandombox.MultiverseCore.api.MVWorldManager;
 import com.onarandombox.MultiverseCore.api.MultiverseWorld;
 import com.onarandombox.MultiverseNetherPortals.MultiverseNetherPortals;
 import org.bukkit.Location;
-import org.bukkit.World;
 import org.bukkit.entity.Player;
+import org.bukkit.event.entity.EntityPortalEvent;
 import org.bukkit.event.player.PlayerPortalEvent;
 
 import java.util.logging.Level;
@@ -53,6 +53,27 @@ public class MVLinkChecker {
             this.plugin.log(Level.WARNING, "World " + fromLocation.getWorld().getName() + " is not a Multiverse world");
         } else {
             this.plugin.log(Level.FINE, "Getting new teleport location for player " + event.getPlayer().getName() + " to world " + worldstring);
+
+            // Set the output location to the same XYZ coords but different world
+            double toScaling = tpto.getScaling();
+            MultiverseWorld tpfrom = this.worldManager.getMVWorld(event.getFrom().getWorld().getName());
+            double fromScaling = tpfrom.getScaling();
+            double yScaling = 1d * tpfrom.getCBWorld().getMaxHeight() / tpto.getCBWorld().getMaxHeight();
+            fromLocation = this.getScaledLocation(fromLocation, fromScaling, toScaling, yScaling);
+
+            fromLocation.setWorld(tpto.getCBWorld());
+        }
+        event.setTo(fromLocation);
+    }
+
+    public void getNewTeleportLocation(EntityPortalEvent event, Location fromLocation, String worldstring) {
+        MultiverseWorld tpto = this.worldManager.getMVWorld(worldstring);
+        if (tpto == null) {
+            this.plugin.log(Level.FINE, "Can't find " + worldstring);
+        } else if (!this.worldManager.isMVWorld(fromLocation.getWorld().getName())) {
+            this.plugin.log(Level.WARNING, "World " + fromLocation.getWorld().getName() + " is not a Multiverse world");
+        } else {
+            this.plugin.log(Level.FINE, "Getting new teleport location for entity " + event.getEntity().getName() + " to world " + worldstring);
 
             // Set the output location to the same XYZ coords but different world
             double toScaling = tpto.getScaling();

@@ -80,7 +80,7 @@ public class MVNPPlayerListener implements Listener {
                 this.linkChecker.getNewTeleportLocation(event, currentLocation, this.nameChecker.getNormalName(currentWorld, PortalType.END));
             }
         } else {
-            if(type == PortalType.END) {
+            if (type == PortalType.END) {
                 this.linkChecker.getNewTeleportLocation(event, currentLocation, this.nameChecker.getEndName(currentWorld));
             } else {
                 this.linkChecker.getNewTeleportLocation(event, currentLocation, this.nameChecker.getNetherName(currentWorld));
