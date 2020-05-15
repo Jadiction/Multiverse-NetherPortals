@@ -67,21 +67,20 @@ public class MVNPEntityListener implements Listener {
         double newVecX = 0;
         double newVecZ = 0;
         // Determine portal axis:
-        BlockFace face = p.getLocation().getBlock().getFace(block);
         if (block.getRelative(BlockFace.EAST).getType() == Material.NETHER_PORTAL || block.getRelative(BlockFace.WEST).getType() == Material.NETHER_PORTAL) {
-            this.plugin.log(Level.FINER, "Found Portal: East/West");
-            if (p.getLocation().getX() < block.getLocation().getX()) {
-                newVecX = -1 * myconst;
-            } else {
-                newVecX = 1 * myconst;
-            }
-        } else {
-            // North/South
-            this.plugin.log(Level.FINER, "Found Portal: North/South");
+            this.plugin.log(Level.FINER, "Found Portal: West/East");
             if (p.getLocation().getZ() < block.getLocation().getZ()) {
                 newVecZ = -1 * myconst;
             } else {
                 newVecZ = 1 * myconst;
+            }
+        } else {
+            // West/East
+            this.plugin.log(Level.FINER, "Found Portal: North/South");
+            if (p.getLocation().getX() < block.getLocation().getX()) {
+                newVecX = -1 * myconst;
+            } else {
+                newVecX = 1 * myconst;
             }
         }
         p.teleport(p.getLocation().clone().add(newVecX, .2, newVecZ));
