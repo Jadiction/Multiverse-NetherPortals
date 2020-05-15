@@ -89,9 +89,9 @@ public class MVNPPlayerListener implements Listener {
         if (event.getTo() == null || event.getFrom() == null) {
             return;
         }
-        if (event.getFrom().getWorld().equals(event.getTo().getWorld())) {
+        if (currentWorld.equals(event.getTo().getWorld().getName())) {
             // The player is Portaling to the same world.
-            this.plugin.log(Level.FINER, "Player '" + event.getPlayer().getName() + "' is portaling to the same world.  Ignoring.");
+            this.plugin.log(Level.FINER, "Player '" + event.getPlayer().getName() + "' is portaling to the same world. Ignoring.");
             event.setTo(originalTo);
             return;
         }

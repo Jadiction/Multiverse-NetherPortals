@@ -211,22 +211,22 @@ public class MVNPEntityListener implements Listener {
             event.setCancelled(true);
             return;
         }
-        Location originalTo = event.getTo();
-        if (originalTo != null) {
-            originalTo = originalTo.clone();
-        }
+
+        // this event is only fired if there is a destination
+        Location originalTo = event.getTo().clone();
         Location currentLocation = event.getFrom().clone();
+
         if (!plugin.isHandledByNetherPortals(currentLocation)) {
             return;
         }
+
         String currentWorld = currentLocation.getWorld().getName();
 
         PortalType type = PortalType.END;
-        // TODO: figure out why using event.getFrom() results in the block next to the portal
-        Location actualLocation = new Location(currentLocation.getWorld(), Math.round(currentLocation.getX()),
+        Location roundedLocation = new Location(currentLocation.getWorld(), Math.round(currentLocation.getX()),
                 Math.round(currentLocation.getY()), Math.round(currentLocation.getZ()));
 
-        if (actualLocation.getBlock().getType() == Material.NETHER_PORTAL) {
+        if (roundedLocation.getBlock().getType() == Material.NETHER_PORTAL) {
             type = PortalType.NETHER;
             try {
                 Class.forName("org.bukkit.TravelAgent");
@@ -260,12 +260,10 @@ public class MVNPEntityListener implements Listener {
                 this.linkChecker.getNewTeleportLocation(event, currentLocation, this.nameChecker.getNetherName(currentWorld));
             }
         }
-        if (event.getTo() == null || event.getFrom() == null) {
-            return;
-        }
-        if (event.getFrom().getWorld().equals(event.getTo().getWorld())) {
+
+        if (currentWorld.equals(event.getTo().getWorld().getName())) {
             // The entity is Portaling to the same world.
-            this.plugin.log(Level.FINER, "Entity '" + event.getEntity().getName() + "' is portaling to the same world.  Ignoring.");
+            this.plugin.log(Level.FINER, "Entity '" + event.getEntity().getName() + "' is portaling to the same world. Ignoring.");
             event.setTo(originalTo);
             return;
         }
