@@ -207,10 +207,6 @@ public class MVNPEntityListener implements Listener {
             this.plugin.log(Level.FINEST, "EntityPortalEvent was cancelled! NOT teleporting!");
             return;
         }
-        if (!plugin.isTeleportingEntities()) {
-            event.setCancelled(true);
-            return;
-        }
 
         // this event is only fired if there is a destination
         Location originalTo = event.getTo().clone();
