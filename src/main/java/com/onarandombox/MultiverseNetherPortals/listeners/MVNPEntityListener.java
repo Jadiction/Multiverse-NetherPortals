@@ -220,13 +220,12 @@ public class MVNPEntityListener implements Listener {
             return;
         }
 
+        String destinationWorld = originalTo.getWorld().getName();
         String currentWorld = currentLocation.getWorld().getName();
 
         PortalType type = PortalType.END;
-        Location roundedLocation = new Location(currentLocation.getWorld(), Math.round(currentLocation.getX()),
-                Math.round(currentLocation.getY()), Math.round(currentLocation.getZ()));
-
-        if (roundedLocation.getBlock().getType() == Material.NETHER_PORTAL) {
+        if (this.nameChecker.isValidNetherName(destinationWorld)
+                || (currentLocation.getWorld().getEnvironment() == World.Environment.NETHER && originalTo.getWorld().getEnvironment() == World.Environment.NORMAL)) {
             type = PortalType.NETHER;
             try {
                 Class.forName("org.bukkit.TravelAgent");
@@ -261,7 +260,7 @@ public class MVNPEntityListener implements Listener {
             }
         }
 
-        if (currentWorld.equals(event.getTo().getWorld().getName())) {
+        if (currentWorld.equals(destinationWorld)) {
             // The entity is Portaling to the same world.
             this.plugin.log(Level.FINER, "Entity '" + event.getEntity().getName() + "' is portaling to the same world. Ignoring.");
             event.setTo(originalTo);
